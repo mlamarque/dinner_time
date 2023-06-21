@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :recipe do
     sequence(:name) { |n| "#{Faker::Food.dish}-#{n}" }

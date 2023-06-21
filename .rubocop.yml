@@ -65,6 +65,7 @@ AllCops:
     - db/schema.rb
     - 'node_modules/**/*'
     - 'tmp/**/*'
+    - 'config/**/*'
     - 'vendor/**/*'
     - '.git/**/*'
     - 'bin/**/*'
