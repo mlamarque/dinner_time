@@ -1,0 +1,20 @@
+section.section.is-light-grey
+  .container
+
+    .is-single-post
+      .featured-post-image
+        figure class="image is-16by9"
+          = image_tag recipe.image
+        .post-date
+          .post-date-inner
+            = l recipe.created_at, format: :long
+      .featured-post-body
+        .content
+          h3 = recipe.name
+        .post-tags
+          span
+            | Ingredients
+          .tags
+            - recipe.foods.each do |food|
+              a.tag.is-medium
+                = food.name

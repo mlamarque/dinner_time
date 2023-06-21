@@ -1,0 +1,17 @@
+section.section
+  h1 Recipes
+  = form_tag(root_url, method: :get) do |f|
+    .field.has-addons
+      .control.is-expanded
+        = text_field_tag :search, params[:search], class: "input", placeholder: "What do you have in your fridge?", autocomplete: "off"
+      .control
+        a.button.is-info
+          |  Search 
+  .container.columns
+    #recipes.mt-6.mb-6
+      .columns.is-multiline.b-columns-half-tablet-p
+        - @recipes.each do |recipe|
+          .column.is-4
+            = link_to recipe
+              == render recipe
+      == pagy_nav(@pagy)
