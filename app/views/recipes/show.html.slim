@@ -1,4 +1,6 @@
-= render @recipe
+.container
+  .columns
+    p =< link_to "Back to Home page", recipes_path
+  .columns
+    = render @recipe
 
-div
-  =< link_to "Back to Home page", recipes_path

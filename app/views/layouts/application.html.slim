@@ -16,6 +16,8 @@ html lang="#{I18n.locale}"
         div.notification class="is-#{type}" = message
     div.main-container
       main role="main"
+
+        = render "shared/search_bar"
         = yield
 
     = render "shared/footer"

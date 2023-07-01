@@ -1,20 +1,18 @@
-section.section.is-light-grey
-  .container
-
-    .is-single-post
-      .featured-post-image
-        figure class="image is-16by9"
-          = image_tag recipe.image
-        .post-date
-          .post-date-inner
-            = l recipe.created_at, format: :long
-      .featured-post-body
-        .content
-          h3 = recipe.name
-        .post-tags
-          span
-            | Ingredients
-          .tags
-            - recipe.foods.each do |food|
-              a.tag.is-medium
-                = food.name
+.card
+  .card-image
+    figure.image.is-4by3
+      = image_tag recipe.image
+  .card-content
+    .media
+      .media-content
+        p.title.is-4
+          = recipe.name
+        p.subtitle.is-6
+          = l recipe.created_at, format: :long
+    .content
+      span
+        | Ingredients:
+        .tags
+          - recipe.foods.each do |food|
+            a.tag.is-medium
+              = truncate(food.name)
