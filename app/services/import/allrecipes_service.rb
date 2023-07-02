@@ -12,13 +12,12 @@ class Import::AllrecipesService
     JSON.parse(data).each do |recipe_data|
       recipe_data = recipe_data.with_indifferent_access
       recipe = Recipe.find_or_initialize_by(name: recipe_data[:title])
-
       recipe.update(
         name: recipe_data[:title],
         cook_time: recipe_data[:cook_time],
         prep_time: recipe_data[:prep_time],
         rate: recipe_data[:ratings],
-        tags: [Tag.find_or_initialize_by(name: recipe_data[:category])],
+        tags: [Tag.find_or_create_by(name: recipe_data[:category])],
         author: recipe_data[:author],
         image: recipe_data[:image]
       )
