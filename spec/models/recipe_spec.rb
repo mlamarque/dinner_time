@@ -71,12 +71,14 @@ RSpec.describe Recipe, type: :model do
 
   describe "Callbacks: " do
     it "is called set_slug on create" do
-      expect(FactoryBot.create(:recipe)).to receive(:set_slug)
+      recipe = FactoryBot.create(:recipe)
+      expect(recipe.slug).to eq(recipe.name.to_s.parameterize)
     end
 
     it "is called set_slug on update" do
       recipe = FactoryBot.create(:recipe)
-      expect(recipe.update(title: "lorem")).to receive(:set_slug)
+      recipe.update(name: "lorem")
+      expect(recipe.slug).to eq(recipe.name.to_s.parameterize)
     end
   end
 
