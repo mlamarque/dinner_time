@@ -1,13 +1,13 @@
 section.section.content
   .container
     h1.mb-0 
-      = link_to "Recipe Finder 🍲", root_url
-    p.is-size-7.mb-5 discover delicious dishes with your ingredients
+      = link_to t(".title"), root_url
+    p.is-size-7.mb-5 = t(".description")
     = form_tag(root_url, method: :get) do |f|
       .field.has-addons
         .select.control
-          = select_tag :type_of_search, options_for_select([['Find recipe with at least', ""], ['Find recipe with either', :any]], params[:type_of_search])
+          = select_tag :type_of_search, options_for_select([[t(".select_options.at_least"), ""], [t(".select_options.either"), :any]], params[:type_of_search])
         .control.is-expanded
-          = text_field_tag :search, params[:search], class: "input", placeholder: "What do you have in your fridge?", autocomplete: "off"
+          = text_field_tag :search, params[:search], class: "input", placeholder: t(".placeholder"), autocomplete: "off"
         .control
-          = submit_tag "Search", class: "button is-info"
+          = submit_tag t(".search_cta"), class: "button is-info"
