@@ -5,11 +5,13 @@ class RecipesController < ApplicationController
 
   def index
     recipes = if params[:search].blank?
-      Recipe.all.includes(:foods)
+      Recipe.all
+    elsif params[:type_of_search] == "any"
+      Recipe.search_any_food(clean_search_keywords)
     else
-      Recipe.search_by_food(clean_search_keywords).includes(:foods)
+      Recipe.search_all_food(clean_search_keywords)
     end
-    @pagy, @recipes = pagy(recipes)
+    @pagy, @recipes = pagy(recipes.includes(:foods))
   end
 
   def show; end
@@ -23,6 +25,6 @@ class RecipesController < ApplicationController
   end
 
   def set_recipe
-    @recipe = Recipe.find(params[:id])
+    @recipe = Recipe.find_by_id(params[:id])
   end
 end

@@ -14,8 +14,13 @@ RSpec.describe RecipesController do
       expect(response).to render_template(:index)
     end
 
-    it "should call search_by_food  with search parameter is present" do
-      expect(Recipe).to receive(:search_by_food).and_call_original
+    it "should call search_any_food  with search parameter is present" do
+      expect(Recipe).to receive(:search_any_food).and_call_original
+      get :index, params: { search: "lorem", type_of_search: "any" }
+    end
+
+    it "should call search_all_food  with search parameter is present" do
+      expect(Recipe).to receive(:search_all_food).and_call_original
       get :index, params: { search: "lorem" }
     end
   end
@@ -23,7 +28,7 @@ RSpec.describe RecipesController do
   describe "#show" do
     it "should display the recipe" do
       recipe = FactoryBot.create(:recipe)
-      get :show, params: { id: recipe }
+      get :show, params: { id: recipe.id }
       expect(response).to render_template(:show)
     end
   end
