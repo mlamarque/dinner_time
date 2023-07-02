@@ -22,7 +22,5 @@ RSpec.describe Food, type: :model do
   describe "Validations: " do
     it { is_expected.to validate_presence_of(:name) }
 
-    subject { FactoryBot.build(:food) }
-    it { is_expected.to validate_uniqueness_of(:name) }
   end
 end

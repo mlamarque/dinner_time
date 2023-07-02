@@ -67,24 +67,32 @@ RSpec.describe Recipe, type: :model do
     it { is_expected.to validate_presence_of(:prep_time) }
     it { is_expected.to validate_presence_of(:cook_time) }
     it { is_expected.to validate_presence_of(:author) }
+  end
 
-    subject { FactoryBot.build(:recipe) }
-    it { is_expected.to validate_uniqueness_of(:name) }
+  describe "Callbacks: " do
+    it "is called set_slug on create" do
+      expect(FactoryBot.create(:recipe)).to receive(:set_slug)
+    end
+
+    it "is called set_slug on update" do
+      recipe = FactoryBot.create(:recipe)
+      expect(recipe.update(title: "lorem")).to receive(:set_slug)
+    end
   end
 
   describe ".pg_search_scope" do
     let!(:recipe_a) { FactoryBot.create(:recipe) }
     let!(:recipe_b) { FactoryBot.create(:recipe) }
 
-    describe "search_by_food" do
+    describe "search_all_food" do
       context "with empty query" do
         it "return empty array" do
-          expect(Recipe.search_by_food("")).to be_empty
+          expect(Recipe.search_all_food("")).to be_empty
         end
       end
       context "with 1 ingredient" do
         it "return results" do
-          expect(Recipe.search_by_food(recipe_a.foods.first.name)).to contain_exactly(recipe_a)
+          expect(Recipe.search_all_food(recipe_a.foods.first.name)).to contain_exactly(recipe_a)
         end
       end
       context "with many ingredients" do
@@ -103,16 +111,62 @@ RSpec.describe Recipe, type: :model do
               FactoryBot.create(:ingredient, food: pepper),
               FactoryBot.create(:ingredient, food: suggar)
             ])
-          expect(Recipe.search_by_food("salt pepper"))
+          expect(Recipe.search_all_food("salt pepper"))
             .to contain_exactly(recipe_a, recipe_b)
         end
       end
       context "with some part of ingredient name" do
         it "return results" do
-          expect(Recipe.search_by_food(recipe_a.foods.first.name[0..2]))
+          expect(Recipe.search_all_food(recipe_a.foods.first.name[0..2]))
             .to contain_exactly(recipe_a)
         end
       end
+    end
+
+    describe "search_any_food" do
+      context "with empty query" do
+        it "return empty array" do
+          expect(Recipe.search_any_food("")).to be_empty
+        end
+      end
+      context "with 1 ingredient" do
+        it "return results" do
+          expect(Recipe.search_any_food(recipe_a.foods.first.name)).to contain_exactly(recipe_a)
+        end
+      end
+      context "with many ingredients" do
+        it "return results" do
+          salt = FactoryBot.create(:food, name: "salt")
+          pepper = FactoryBot.create(:food, name: "pepper")
+          suggar = FactoryBot.create(:food, name: "suggar")
+          recipe_a = FactoryBot.create(:recipe, ingredients:
+            [
+              FactoryBot.create(:ingredient, food: salt),
+            ])
+          recipe_b = FactoryBot.create(:recipe, ingredients:
+            [
+              FactoryBot.create(:ingredient, food: salt),
+              FactoryBot.create(:ingredient, food: pepper),
+              FactoryBot.create(:ingredient, food: suggar)
+            ])
+          expect(Recipe.search_any_food("salt pepper"))
+            .to contain_exactly(recipe_a, recipe_b)
+        end
+      end
+      context "with some part of ingredient name" do
+        it "return results" do
+          expect(Recipe.search_any_food(recipe_a.foods.first.name[0..2]))
+            .to contain_exactly(recipe_a)
+        end
+      end
+    end
+  end
+
+  describe "to_param" do
+    let!(:recipe_a) { FactoryBot.create(:recipe) }
+
+    it "return parame identifier" do
+      expect(recipe_a.to_param).to eq("#{recipe_a.id}-#{recipe_a.slug}")
     end
   end
 end

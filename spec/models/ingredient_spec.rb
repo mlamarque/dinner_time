@@ -18,7 +18,7 @@ RSpec.describe Ingredient, type: :model do
     it {
       is_expected
         .to have_db_column(:recipe_id)
-        .of_type(:uuid)
+        .of_type(:integer)
         .with_options(null: false)
     }
   end
