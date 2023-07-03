@@ -138,18 +138,19 @@ RSpec.describe Recipe, type: :model do
       end
       context "with many ingredients" do
         it "return results" do
+          Recipe.delete_all
           salt = FactoryBot.create(:food, name: "salt")
           pepper = FactoryBot.create(:food, name: "pepper")
           suggar = FactoryBot.create(:food, name: "suggar")
           recipe_a = FactoryBot.create(:recipe, ingredients:
             [
-              FactoryBot.create(:ingredient, food: salt),
+              FactoryBot.build(:ingredient, food: salt)
             ])
           recipe_b = FactoryBot.create(:recipe, ingredients:
             [
-              FactoryBot.create(:ingredient, food: salt),
-              FactoryBot.create(:ingredient, food: pepper),
-              FactoryBot.create(:ingredient, food: suggar)
+              FactoryBot.build(:ingredient, food: salt),
+              FactoryBot.build(:ingredient, food: pepper),
+              FactoryBot.build(:ingredient, food: suggar)
             ])
           expect(Recipe.search_any_food("salt pepper"))
             .to contain_exactly(recipe_a, recipe_b)

@@ -6,22 +6,18 @@ RSpec.describe Import::AllrecipesService, type: :model do
   let!(:service) { Import::AllrecipesService.new }
 
   describe "#call" do
-    it "should call import method" do
-      expect_any_instance_of(Import::AllrecipesService).to receive(:import)
-      service.call
-    end
-  end
-
-  describe "#call" do
     before :each do
       allow(File).to receive(:read).and_return(some_recipes_data)
     end
     it "should create recipes" do
-      expect do
-        service.call
-      end
-        .to change { Recipe.count }
-        .by(2)
+      service.call
+      expect(Recipe.count).to eq 2
+    end
+
+    it "should call process_recipes in every thread" do
+      expect_any_instance_of(Import::AllrecipesService).to receive(:process_recipes)
+        .exactly(Import::AllrecipesService::NUM_THREADS).times
+      service.call
     end
 
     it "should assign tag" do

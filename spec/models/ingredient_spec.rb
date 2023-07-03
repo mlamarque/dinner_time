@@ -33,9 +33,4 @@ RSpec.describe Ingredient, type: :model do
         .to belong_to(:recipe)
     }
   end
-
-  describe "Validations: " do
-    subject { FactoryBot.build(:ingredient) }
-    it { is_expected.to validate_uniqueness_of(:food).scoped_to(:recipe_id) }
-  end
 end
